@@ -1,0 +1,17 @@
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@HEAD
+    - # uses: docker://ubuntu:23.10
+      # with:
+      #   args: sh -c "eval \""$"cmd\""
+      run: JAVA_HOME="$JAVA_HOME_17_X64" eval "$cmd"
+      env:
+        cmd: |
+          # apt-get update && apt-get install -y openjdk-17-jdk-headless
+          find -mindepth 2 -name build.sh -exec sh -c 'cd "${0%/*}" && "./${0##*/}"' {} \;
+    - uses: actions/upload-artifact@HEAD
+      with:
+        path: "**/*.apk"
